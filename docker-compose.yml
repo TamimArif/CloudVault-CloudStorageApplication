@@ -1,0 +1,25 @@
+
+services:
+  server:
+    build: ./Server
+    container_name: drive_clone_server
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./Server/.env
+    volumes:
+      - ./Server/db:/app/db
+    restart: always
+
+  client:
+    build:
+      context: ./client
+      args:
+        VITE_API_BASE_URL: http://localhost:5000
+        VITE_GOOGLE_CLIENT_ID: 1071747634824-2ihamkd9brqum9ngkpiosp8hi1cetu6i.apps.googleusercontent.com
+    container_name: drive_clone_client
+    ports:
+      - "5173:80"
+    depends_on:
+      - server
+    restart: always
